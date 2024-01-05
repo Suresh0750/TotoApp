@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>practice</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        
+        #inputBox{
+            margin-left: 15em;
+            width: 13em;
+            padding: 0em 1em;
+            height: 1.5em;
+        }
+        .task{
+            border:2px solid green;
+            margin:10px;
+            cursor: pointer;
+            padding:10px;
+            text-align:center;
+            width:25em;
+            transition: 1s;
+            border-radius: 10px;
+        }
+        #taskContainer{
+            margin-left: 11em;
+        }
+        .completed{
+
+            border-color:tomato;
+            text-decoration:line-through;
+            opacity:0.3
+        }
+    </style>
+</head>
+<body>
+    <h1>Hell Developer</h1>
+
+
+    <input id='inputBox' placeholder="Enter some text...">
+    <button id="btn" value="submit">ADD</button>
+    <!-- <button id="console"> console</button> -->
+
+    <div id="taskContainer">
+       
+    </div>
+    <script>
+
+//?-------------------==17 VIDEO DOM ==------------------------
+        // let div=document.createElement('div');
+        // div.innerText='suresh'
+
+        // let task=document.getElementById('task');
+        // console.log(task);
+        // task.append(div)
+
+        // div.setAttribute('class','taskNew')
+
+        // div.style.backgroundColor='red'
+
+        // console.log(div.style.backgroundColor);
+
+
+        // console.log(div.getAttribute('class'));
+
+//?---------------------==18 VIDEO EVEN HANDLER---------------------------------
+
+
+//         let inputBox=document.getElementById('inputBox')
+
+//         // inputBox.onkeydown=keyValue;
+//         inputBox.addEventListener("click",keyValue)
+
+//         console.log(inputBox)
+
+
+//    function keyValue(e){
+
+//             console.log(e.key);
+//             console.log('working...')
+//         }
+
+        //=========================GLOBAL METHOD===============================
+//!---------------------===WINDOW AND SCROLL===--------------------------------
+
+        // 1) scroll
+        // 2) resize
+        // window.addEventListener('resize',function(event){
+        //     console.log('Window resize working.....');
+        //     console.log(event.target.outerWidth);
+        // })
+
+
+        const addBtn=document.getElementById('btn');
+        const inputBox=document.getElementById('inputBox');
+        const taskContainer= document.getElementById('taskContainer')
+        const console= document.getElementById('console')
+        const localStoragevalue=[]
+        
+
+        addBtn.addEventListener('click',addTask)
+        inputBox.addEventListener('keyup',inputHandler)
+      
+
+        
+
+        
+        function handleRomover(){
+            
+            this.remove()
+            let valueRemover=this.getAttribute('id')
+
+            for(var i=0;i<localStoragevalue.length;i++)
+            {
+                const matchValue=localStoragevalue[i]
+                if((valueRemover).toString()==(matchValue.id).toString())
+                {
+                    localStoragevalue.splice(i,1);
+                }
+            }
+
+            storageSession()
+
+        }
+
+        function evenHandler(){
+          
+            this.classList.toggle("completed");
+            
+            let idValue=this.getAttribute('id')
+            let refreshValue=this.id
+            // console.log(refreshValue)
+            
+
+            for(var i=0;i<localStoragevalue.length;i++)
+            {
+                const check=localStoragevalue[i]
+                
+                if((idValue).toString()===(check.id).toString())
+                {
+                
+                    check.isCompleted=!check.isCompleted
+                 
+                }
+
+            }
+
+            storageSession()
+            
+
+        }
+        // function addStyle(element,styles){
+            
+        //     const stylesObj=Object.keys(styles)
+        //     for(var i=0;i<stylesObj.length;i++)
+        //     {
+        //         element.style[stylesObj[i]]=styles[stylesObj[i]]
+        //     }
+            
+            
+        // }
+        //!-------put style tag insaid--------------------
+        
+        // const styleObj={
+        //     border:'2px solid green',
+        //     cursor:'pointer',
+        //     margin:'10px',
+        //     padding:'10px',
+        //     textAlign:'center'
+        // }
+       
+        
+            function getItem(){
+
+                let task=localStorage.getItem('task')
+                if(!task){
+                    return;
+                }
+
+                task=JSON.parse(task)
+                for(var index in task)
+                {
+                    let store=task[index]
+                    displayElement(store.value,store.isCompleted,store.id);
+                    localStoragevalue.push(task[index])
+                }
+
+            }
+            getItem()
+
+
+        function displayElement(inputValue,isCompleted,Id){
+      //* create the new element
+            const newElement=document.createElement('div')
+                //* new element insaid assagn the value
+            newElement.innerText=inputValue;
+                     
+            //* new element style -------------------
+            //addStyle(newElement,styleObj)evenHandler
+
+
+        if(isCompleted){
+            newElement.setAttribute('class','task completed'); 
+            newElement.setAttribute('id',Id);
+        }else{
+            newElement.setAttribute('class','task')
+            newElement.setAttribute('id',Id)
+        }
+            newElement.addEventListener('click',evenHandler)
+            newElement.addEventListener('dblclick',handleRomover)
+
+            //* newElement append the taskContainer
+            taskContainer.append(newElement)
+        }
+
+        function storageSession(){
+            
+            localStorage.setItem('task',JSON.stringify(localStoragevalue))
+            
+            // console.log(typeof(inputValue))
+        }
+
+        function addTask(){
+
+            const inputValue=(inputBox.value).trim('')
+            //*AVOID EMPTY VALUE 
+            
+            if(inputValue.length===0) return alert('Please Enter the Value');
+
+          //!-------unique id----------------------
+            const year=new Date().getFullYear().toString()
+            const month=new Date().getMonth().toString()
+            const date= new Date().getDate().toString()
+            const minutes=new Date().getMinutes().toString()
+            const seconds=new Date().getSeconds().toString()
+            const milliSeconds=new Date().getMilliseconds().toString()
+
+            const compine = year+month+date+minutes+seconds+milliSeconds
+            const obj={}
+            obj.value=inputValue;
+            obj.isCompleted=false;
+            obj.id=Math.random()+compine
+            
+            localStoragevalue.push(obj);
+            
+            storageSession()
+            
+            displayElement(inputValue,false,Id)
+           
+        }
+
+       //input Enter ana value console aka 
+       function inputHandler(e){
+        if(e.keyCode==13)
+        {
+            addTask();
+        }
+       }
+
+//!-----------------==Session and Local Storage==-------------------------------------
+
+    //    console.log(window.sessionStorage)
+
+    //    sessionStorage.setItem('name','suresh');
+    //    sessionStorage.setItem('age','21')
+
+    //    const name=sessionStorage.getItem('name');
+    //    const age=sessionStorage.getItem('age')
+    //    console.log(name)
+    //    console.log(age)
+
+    //   localStorage.setItem('name','pranav');
+    //   localStorage.setItem('age','21')
+    //   const frdname=localStorage.getItem('name');
+    //    const frdage=localStorage.getItem('age')
+    //    console.log(frdname)
+    //    console.log(frdage)
+
+    //************************Cookies********************************************
+
+
+       
+
+
+    //    console.log(new Date(2023, 11 ,17).toUTCString())
+    //    const expires=(new Date(2023, 11 ,17).toUTCString())
+    //    document.cookie='name=suresh;expires='+expires;
+    //    document.cookie=`age=21;expires=${expires}`
+
+    //    sessionStorage.setItem('name','suresh');
+
+    //    localStorage.setItem('akash',21)
+    //    localStorage.removeItem()
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

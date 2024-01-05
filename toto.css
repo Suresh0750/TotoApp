@@ -1,0 +1,54 @@
+
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 15em;
+}
+.completed{
+
+    border-color:tomato;
+    text-decoration:line-through;
+    opacity:0.3
+}
+#taskContainer{
+    margin-left:25em;
+}
+
+#inputBox{
+    height: 30px;
+    width: 20em;
+    border-radius: 10px;
+}
+
+#inputBox:active{
+    border-color:pink;
+    color:red;
+}
+#inputBox:hover{
+    border-color:rgb(255, 254, 192);
+   
+}
+#inputBox:visited{
+    border-color:rgb(192, 214, 255);
+    color:rgb(255, 0, 242);
+}
+
+#btn{
+    margin-left:2em;
+}
+
+
+
+.task{
+    border:2px solid green;
+    margin:10px;
+    cursor: pointer;
+    padding:10px;
+    text-align:center;
+    width:25em;
+    transition: 1s;
+    border-radius: 10px;
+}
